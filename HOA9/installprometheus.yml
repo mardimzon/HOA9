@@ -1,0 +1,26 @@
+#installing prometheus 
+
+---
+
+- hosts: ubuntuprometheus
+  become: true
+  tasks:
+
+    - name: install prometheus
+      apt:
+        name: prometheus
+        state: latest
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_distribution = "Ubuntu"
+ 
+    - name: prometheus args
+      template:
+        src: promotheus.j2
+        dest: /etc/default/prometheus
+        mode: 0644
+        owner: root
+        group: root
+      notify: restart_prometheus
+      
+
